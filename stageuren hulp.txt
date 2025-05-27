@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StageUren Hulp</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+      max-width: 600px;
+      margin: auto;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.25rem;
+    }
+    .resultaat {
+      margin-top: 2rem;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      white-space: pre-line;
+    }
+    .voortgangsbalk {
+      margin-top: 1rem;
+      background: #eee;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .balk {
+      height: 24px;
+      background: #4caf50;
+      width: 0%;
+      transition: width 0.5s;
+    }
+  </style>
+</head>
+<body>
+  <h1>StageUren Hulp</h1>
+
+  <label for="leerjaar">Kies je leerjaar:</label>
+  <select id="leerjaar">
+    <option value="jaar1">Jaar 1 (315 uur)</option>
+    <option value="jaar2">Jaar 2 (570 uur)</option>
+  </select>
+
+  <div id="jaar2-opties" style="display:none;">
+    <label for="doeluren">Kies diplomeringstijdstip (jaar 2):</label>
+    <select id="doeluren">
+      <option value="285">Februari (285 uur)</option>
+      <option value="380">Maart (380 uur)</option>
+      <option value="475">April (475 uur)</option>
+      <option value="520">Mei (520 uur)</option>
+      <option value="570">Juni (570 uur)</option>
+    </select>
+  </div>
+
+  <label for="urenOpenstaand">Heb je uren openstaan uit leerjaar 1?</label>
+  <input type="number" id="urenOpenstaand" value="0" min="0" />
+
+  <label for="gelopen">Hoeveel uur heb je al gelopen in dit leerjaar?</label>
+  <input type="number" id="gelopen" value="0" min="0" />
+
+  <label for="perweek">Hoeveel uur loop je per week?</label>
+  <input type="number" id="perweek" value="8" min="1" />
+
+  <button onclick="bereken()">Bereken</button>
+
+  <div class="resultaat" id="resultaat" style="display:none;">
+    <p id="output"></p>
+    <div class="voortgangsbalk">
+      <div class="balk" id="balk"></div>
+    </div>
+  </div>
+
+  <script>
+    const leerjaar = document.getElementById("leerjaar");
+    const jaar2Opties = document.getElementById("jaar2-opties");
+    const doelurenSelect = document.getElementById("doeluren");
+    const urenOpenstaandInput = document.getElementById("urenOpenstaand");
+
+    leerjaar.addEventListener("change", () => {
+      if (leerjaar.value === "jaar2") {
+        jaar2Opties.style.display = "block";
+      } else {
+        jaar2Opties.style.display = "none";
+        doelurenSelect.value = "315"; // reset default voor jaar 1
+      }
+    });
+
+    function bereken() {
+      const gelopen = parseInt(document.getElementById("gelopen").value) || 0;
+      const perweek = parseInt(document.getElementById("perweek").value) || 0;
+      const urenOpenstaand = parseInt(urenOpenstaandInput.value) || 0;
+
+      let doeluren;
+      if (leerjaar.value === "jaar1") {
+        doeluren = 315;
+      } else {
+        doeluren = parseInt(doelurenSelect.value);
+      }
+
+      const totaalTeLopen = doeluren + urenOpenstaand;
+      const resterend = Math.max(totaalTeLopen - gelopen, 0);
+      const weken = perweek > 0 ? Math.ceil(resterend / perweek) : "∞";
+      const percentage = Math.min((gelopen / totaalTeLopen) * 100, 100);
+
+      document.getElementById("output").innerText =
+        `Je moet in totaal ${totaalTeLopen} uur lopen.\n` +
+        `Je hebt ${gelopen} uur gelopen en moet nog ${resterend} uur.\n` +
+        `Op dit tempo ben je klaar over ${weken} weken.`;
+
+      document.getElementById("balk").style.width = percentage + "%";
+      document.getElementById("resultaat").style.display = "block";
+    }
+  </script>
+</body>
+</html>
