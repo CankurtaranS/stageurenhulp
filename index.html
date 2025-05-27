@@ -49,6 +49,10 @@
     <option value="jaar1">Jaar 1 (315 uur)</option>
     <option value="jaar2">Jaar 2 (570 uur)</option>
   </select>
+  <div id="jaar2-extra-vraag" style="display: none;">
+    <label for="openUrenJaar1">Heb je uren openstaan uit leerjaar 1?</label>
+    <input type="number" id="openUrenJaar1" name="openUrenJaar1" value="0" min="0">
+  </div>
 
   <div id="jaar2-opties" style="display:none;">
     <label for="doeluren">Kies diplomeringstijdstip (jaar 2):</label>
@@ -119,6 +123,19 @@
       document.getElementById("balk").style.width = percentage + "%";
       document.getElementById("resultaat").style.display = "block";
     }
+
+    <script>
+  const jaarSelect = document.getElementById("leerjaar");
+  jaarSelect.addEventListener("change", () => {
+    if (jaarSelect.value === "2") {
+      document.getElementById("jaar2-extra-vraag").style.display = "block";
+    } else {
+      document.getElementById("jaar2-extra-vraag").style.display = "none";
+    }
+  });
+</script>
   </script>
 </body>
 </html>
+
+
