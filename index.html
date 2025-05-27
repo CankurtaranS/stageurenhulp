@@ -86,7 +86,8 @@
     const leerjaar = document.getElementById("leerjaar");
     const jaar2Opties = document.getElementById("jaar2-opties");
     const doelurenSelect = document.getElementById("doeluren");
-    const urenOpenstaandInput = document.getElementById("urenOpenstaand");
+    const urenOpenstaand = parseInt(document.getElementById("openUrenJaar1").value) || 0;
+
 
     leerjaar.addEventListener("change", () => {
       if (leerjaar.value === "jaar2") {
